@@ -7,3 +7,4 @@ from langchain_core.messages import AIMessage, HumanMessage
 class AgentState(TypedDict):
     messages: Annotated[List[HumanMessage | AIMessage], operator.add]
     context: str
+    needs_retrieval: bool
