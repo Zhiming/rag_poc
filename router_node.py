@@ -1,10 +1,15 @@
+from pydantic import BaseModel
 from langchain_core.messages import SystemMessage
 from model import AgentState
 
 
+class RouteDecision(BaseModel):
+    needs_retrieval: bool
+
+
 class Router_Node():
     def __init__(self, llm):
-        self.__llm = llm
+        self.__llm = llm.with_structured_output(RouteDecision)
 
     async def route(self, state: AgentState):
         messages = state["messages"]
@@ -12,9 +17,8 @@ class Router_Node():
 
         system_prompt = SystemMessage("""You are a routing assistant.
 Decide if the user's question requires searching external documents, or if it can be answered from the conversation history alone.
-Reply with ONLY one word: 'retrieve' or 'skip'.""")
+Set needs_retrieval to true if external documents are needed, false if the conversation history is sufficient.""")
 
-        response = await self.__llm.ainvoke([system_prompt, last_message])
-        needs_retrieval = response.content.strip().lower() == "retrieve"
+        decision = await self.__llm.ainvoke([system_prompt, last_message])
 
-        return {"needs_retrieval": needs_retrieval}
+        return {"needs_retrieval": decision.needs_retrieval}
