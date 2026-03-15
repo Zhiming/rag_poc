@@ -1,0 +1,15 @@
+[project]
+name = "rag-poc"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.42.68",
+    "faiss-cpu>=1.13.2",
+    "langchain-aws>=1.4.0",
+    "langchain-community>=0.4.1",
+    "langchain-core>=1.2.19",
+    "langchain-text-splitters>=1.1.1",
+    "langgraph>=1.1.2",
+    "python-dotenv>=1.2.2",
+]
