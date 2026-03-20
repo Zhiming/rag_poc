@@ -14,7 +14,7 @@ class Chat_Model():
 
         self.__llm = ChatBedrockConverse(
             model=model_id,
-            provider=provider,
+            provider=provider ,
             region_name=aws_region,
             temperature=0
         )
