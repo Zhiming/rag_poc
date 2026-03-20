@@ -12,3 +12,6 @@ tests/__pycache__/*
 src/aws/dynamodb/__pycache__/*
 src/aws/__pycache__/*
 src/lambdas/exact_duplicate_check/*
+src/graph/action_item/__pycache__/*
+src/graph/config/__pycache__/*
+src/graph/__pycache__/*
