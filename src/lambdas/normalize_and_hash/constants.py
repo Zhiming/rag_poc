@@ -1,0 +1,10 @@
+UNICODE_NORMALIZATION_FORM = "NFC"
+TEXT_ENCODING = "utf-8"
+HASH_ALGORITHM = "sha256"
+ALLOWED_CHARS_PATTERN = r"[^a-z0-9 ]"
+WHITESPACE_COLLAPSE_PATTERN = r" +"
+
+# Event field keys
+FIELD_SOURCE_INPUT = "source_input"
+FIELD_NORMALIZED_TEXT = "normalized_text"
+FIELD_CONTENT_HASH = "content_hash"
