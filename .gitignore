@@ -3,3 +3,9 @@ __pycache__/*
 venv/*
 .vscode/*
 pyrightconfig.json
+.venv/
+.python-version
+src/lambdas/__pycache__/*
+src/lambdas/normalize_and_hash/__pycache__/*
+tests/lambdas/__pycache__/*
+tests/__pycache__/*
