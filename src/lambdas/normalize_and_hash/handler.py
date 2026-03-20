@@ -2,7 +2,7 @@ import hashlib
 import re
 import unicodedata
 
-from lambdas.normalize_and_hash.constants import (
+from lambdas.constants import (
     ALLOWED_CHARS_PATTERN,
     FIELD_CONTENT_HASH,
     FIELD_NORMALIZED_TEXT,
