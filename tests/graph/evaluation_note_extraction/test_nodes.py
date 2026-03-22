@@ -32,7 +32,7 @@ def _make_llm(output: EvaluationNoteList) -> MagicMock:
 
 
 def test_invoke_llm_returns_list_of_dicts():
-    llm = _make_llm(EvaluationNoteList(observations=[CAMERA_NOTE]))
+    llm = _make_llm(EvaluationNoteList(evaluation_notes=[CAMERA_NOTE]))
 
     result = invoke_llm(BASE_STATE, llm)
 
@@ -47,7 +47,7 @@ def test_invoke_llm_returns_list_of_dicts():
 
 
 def test_invoke_llm_returns_multiple_observations():
-    output = EvaluationNoteList(observations=[
+    output = EvaluationNoteList(evaluation_notes=[
         EvaluationNote(issue="default credentials active", remediation="credentials reset",
                        device_type="camera", device_id="cam-01"),
         EvaluationNote(issue="damaged locking mechanism", remediation="door replaced",
@@ -66,7 +66,7 @@ def test_invoke_llm_returns_multiple_observations():
 
 
 def test_invoke_llm_with_optional_fields_absent():
-    output = EvaluationNoteList(observations=[
+    output = EvaluationNoteList(evaluation_notes=[
         EvaluationNote(issue="door unresponsive", remediation="door replaced", device_type="security_door")
     ])
     llm = _make_llm(output)
@@ -79,7 +79,7 @@ def test_invoke_llm_with_optional_fields_absent():
 
 
 def test_invoke_llm_passes_normalized_text_in_prompt():
-    llm = _make_llm(EvaluationNoteList(observations=[]))
+    llm = _make_llm(EvaluationNoteList(evaluation_notes=[]))
     invoke_llm(BASE_STATE, llm)
 
     prompt_arg = llm.with_structured_output.return_value.invoke.call_args[0][0]
@@ -87,14 +87,14 @@ def test_invoke_llm_passes_normalized_text_in_prompt():
 
 
 def test_invoke_llm_uses_structured_output_with_correct_schema():
-    llm = _make_llm(EvaluationNoteList(observations=[]))
+    llm = _make_llm(EvaluationNoteList(evaluation_notes=[]))
     invoke_llm(BASE_STATE, llm)
 
     llm.with_structured_output.assert_called_once_with(EvaluationNoteList)
 
 
 def test_invoke_llm_returns_empty_list_when_no_qualifying_observations():
-    llm = _make_llm(EvaluationNoteList(observations=[]))
+    llm = _make_llm(EvaluationNoteList(evaluation_notes=[]))
 
     result = invoke_llm(BASE_STATE, llm)
 
@@ -102,7 +102,7 @@ def test_invoke_llm_returns_empty_list_when_no_qualifying_observations():
 
 
 def test_invoke_llm_excludes_none_fields_from_dicts():
-    output = EvaluationNoteList(observations=[
+    output = EvaluationNoteList(evaluation_notes=[
         EvaluationNote(issue="default credentials active", remediation="credentials reset", device_type="camera")
     ])
     llm = _make_llm(output)
@@ -115,7 +115,7 @@ def test_invoke_llm_excludes_none_fields_from_dicts():
 
 def test_invoke_llm_appends_validation_errors_to_prompt():
     state = {**BASE_STATE, "validation_errors": ["issue field is required"]}
-    llm = _make_llm(EvaluationNoteList(observations=[]))
+    llm = _make_llm(EvaluationNoteList(evaluation_notes=[]))
     invoke_llm(state, llm)
 
     prompt_arg = llm.with_structured_output.return_value.invoke.call_args[0][0]
@@ -123,7 +123,7 @@ def test_invoke_llm_appends_validation_errors_to_prompt():
 
 
 def test_invoke_llm_clears_validation_errors_on_success():
-    llm = _make_llm(EvaluationNoteList(observations=[]))
+    llm = _make_llm(EvaluationNoteList(evaluation_notes=[]))
     result = invoke_llm(BASE_STATE, llm)
 
     assert result["validation_errors"] is None

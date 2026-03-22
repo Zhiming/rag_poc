@@ -15,4 +15,4 @@ class EvaluationNote(BaseModel):
 
 
 class EvaluationNoteList(BaseModel):
-    observations: List[EvaluationNote]
+    evaluation_notes: List[EvaluationNote]

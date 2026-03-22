@@ -23,12 +23,12 @@ def invoke_llm(state: EvaluationNoteExtractionState, llm) -> dict:
 
     structured_llm = llm.with_structured_output(EvaluationNoteList)
     response = structured_llm.invoke(prompt)
-    return {FIELD_EVALUATION_NOTES: [obs.model_dump(exclude_none=True) for obs in response.observations], FIELD_VALIDATION_ERRORS: None}
+    return {FIELD_EVALUATION_NOTES: [obs.model_dump(exclude_none=True) for obs in response.evaluation_notes], FIELD_VALIDATION_ERRORS: None}
 
 
 def validate_schema(state: EvaluationNoteExtractionState) -> dict:
     try:
-        EvaluationNoteList(observations=state[FIELD_EVALUATION_NOTES])
+        EvaluationNoteList(evaluation_notes=state[FIELD_EVALUATION_NOTES])
         return {FIELD_VALIDATION_ERRORS: None}
     except ValidationError as e:
         errors = [err[VALIDATION_ERROR_MSG_KEY] for err in e.errors()]
