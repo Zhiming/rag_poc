@@ -1,8 +1,8 @@
 import json
 
-from graph.evaluation_note_extraction.graph import graph
+from graph.evaluation_note_extraction.graph import build_graph
 
-result = graph.invoke({
+result = build_graph().invoke({
     "normalized_text": (
         "security evaluation conducted on 20240918 at data center dc ams 02 "
 
@@ -34,9 +34,9 @@ result = graph.invoke({
         "the temperature sensor in power room b was reading 12 degrees above the expected baseline "
         "the cause has not yet been identified and no corrective action has been taken"
     ),
-    "evaluation_notes": None,
+    "evaluation_notes": [],
 })
 
 for i, device in enumerate(result["evaluation_notes"]):
-    print(f"Device {i + 1}:")
+    print(f"Note {i + 1}:")
     print(json.dumps(device, indent=2))

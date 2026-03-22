@@ -19,6 +19,3 @@ def build_graph():
     builder.add_edge(NODE_INVOKE_LLM, END)
 
     return builder.compile()
-
-
-graph = build_graph()

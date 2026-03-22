@@ -59,7 +59,7 @@ def test_invoke_llm_returns_multiple_observations():
     assert len(result["evaluation_notes"]) == 3
     assert result["evaluation_notes"][0]["device_type"] == "camera"
     assert result["evaluation_notes"][1]["device_type"] == "security_door"
-    assert result["evaluation_notes"][2]["device_type"] is None  # non-device observation
+    assert "device_type" not in result["evaluation_notes"][2]  # non-device observation
 
 
 def test_invoke_llm_with_optional_fields_absent():
@@ -71,8 +71,8 @@ def test_invoke_llm_with_optional_fields_absent():
     result = invoke_llm(BASE_STATE, llm)
 
     assert result["evaluation_notes"][0]["device_type"] == "security_door"
-    assert result["evaluation_notes"][0]["manufacturer"] is None
-    assert result["evaluation_notes"][0]["device_id"] is None
+    assert "manufacturer" not in result["evaluation_notes"][0]
+    assert "device_id" not in result["evaluation_notes"][0]
 
 
 def test_invoke_llm_passes_normalized_text_in_prompt():
@@ -88,3 +88,23 @@ def test_invoke_llm_uses_structured_output_with_correct_schema():
     invoke_llm(BASE_STATE, llm)
 
     llm.with_structured_output.assert_called_once_with(EvaluationNoteList)
+
+
+def test_invoke_llm_returns_empty_list_when_no_qualifying_observations():
+    llm = _make_llm(EvaluationNoteList(observations=[]))
+
+    result = invoke_llm(BASE_STATE, llm)
+
+    assert result["evaluation_notes"] == []
+
+
+def test_invoke_llm_excludes_none_fields_from_dicts():
+    output = EvaluationNoteList(observations=[
+        EvaluationNote(issue="default credentials active", remediation="credentials reset", device_type="camera")
+    ])
+    llm = _make_llm(output)
+
+    result = invoke_llm(BASE_STATE, llm)
+
+    assert "manufacturer" not in result["evaluation_notes"][0]
+    assert "device_id" not in result["evaluation_notes"][0]

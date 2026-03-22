@@ -8,4 +8,4 @@ def invoke_llm(state: EvaluationNoteExtractionState, llm) -> dict:
     prompt = EXTRACT_EVALUATION_NOTES.format(normalized_text=state[FIELD_NORMALIZED_TEXT])
     structured_llm = llm.with_structured_output(EvaluationNoteList)
     response = structured_llm.invoke(prompt)
-    return {FIELD_EVALUATION_NOTES: [obs.model_dump() for obs in response.observations]}
+    return {FIELD_EVALUATION_NOTES: [obs.model_dump(exclude_none=True) for obs in response.observations]}
