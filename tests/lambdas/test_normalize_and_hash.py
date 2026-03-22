@@ -1,4 +1,4 @@
-from lambdas.normalize_and_hash.handler import handler, normalize
+from lambdas.normalize_and_hash import handler, normalize
 
 
 # --- normalize() unit tests ---

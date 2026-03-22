@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from lambdas.exact_duplicate_check.handler import handler
+from lambdas.exact_duplicate_check import handler
 
 
 BASE_EVENT = {
@@ -13,7 +13,7 @@ BASE_EVENT = {
 }
 
 
-@patch("lambdas.exact_duplicate_check.handler.dynamodb_client")
+@patch("lambdas.exact_duplicate_check.dynamodb_client")
 def test_skips_check_when_stable_document_id_present(mock_ddb):
     event = {**BASE_EVENT, "stable_document_id": "EVN-2024-0047"}
     result = handler(event, None)
@@ -21,21 +21,21 @@ def test_skips_check_when_stable_document_id_present(mock_ddb):
     assert result["is_duplicate"] is False
 
 
-@patch("lambdas.exact_duplicate_check.handler.dynamodb_client")
+@patch("lambdas.exact_duplicate_check.dynamodb_client")
 def test_returns_duplicate_true_when_match_found(mock_ddb):
     mock_ddb.query.return_value = {"Count": 1, "Items": [{"content_hash": {"S": "abc123"}}]}
     result = handler(BASE_EVENT, None)
     assert result["is_duplicate"] is True
 
 
-@patch("lambdas.exact_duplicate_check.handler.dynamodb_client")
+@patch("lambdas.exact_duplicate_check.dynamodb_client")
 def test_returns_duplicate_false_when_no_match(mock_ddb):
     mock_ddb.query.return_value = {"Count": 0, "Items": []}
     result = handler(BASE_EVENT, None)
     assert result["is_duplicate"] is False
 
 
-@patch("lambdas.exact_duplicate_check.handler.dynamodb_client")
+@patch("lambdas.exact_duplicate_check.dynamodb_client")
 def test_passes_through_all_event_fields(mock_ddb):
     mock_ddb.query.return_value = {"Count": 0, "Items": []}
     result = handler(BASE_EVENT, None)
@@ -43,7 +43,7 @@ def test_passes_through_all_event_fields(mock_ddb):
     assert result["content_hash"] == "abc123"
 
 
-@patch("lambdas.exact_duplicate_check.handler.dynamodb_client")
+@patch("lambdas.exact_duplicate_check.dynamodb_client")
 def test_queries_with_correct_content_hash(mock_ddb):
     mock_ddb.query.return_value = {"Count": 0, "Items": []}
     handler(BASE_EVENT, None)
