@@ -39,6 +39,6 @@ result = build_graph().invoke({
     "retry_count": 0,
 })
 
-for i, device in enumerate(result["evaluation_notes"]):
+for i, note in enumerate(result["evaluation_notes"]):
     print(f"Note {i + 1}:")
-    print(json.dumps(device, indent=2))
+    print(json.dumps(note, indent=2))
