@@ -8,22 +8,24 @@ from graph.evaluation_note_extraction.nodes import invoke_llm, validate_schema
 from graph.evaluation_note_extraction.state import EvaluationNoteExtractionState
 
 
-def _route_after_validation(state: EvaluationNoteExtractionState) -> str:
-    if state.get(FIELD_VALIDATION_ERRORS):
-        return NODE_INVOKE_LLM
-    return END
+class EvaluationNoteExtractionGraph:
+    def __init__(self):
+        self.llm = Chat_Model().chat_llm
 
+    @staticmethod
+    def _route_after_validation(state: EvaluationNoteExtractionState) -> str:
+        if state.get(FIELD_VALIDATION_ERRORS):
+            return NODE_INVOKE_LLM
+        return END
 
-def build_graph():
-    llm = Chat_Model().chat_llm
+    def build_graph(self):
+        builder = StateGraph(EvaluationNoteExtractionState)
 
-    builder = StateGraph(EvaluationNoteExtractionState)
+        builder.add_node(NODE_INVOKE_LLM, partial(invoke_llm, llm=self.llm))
+        builder.add_node(NODE_VALIDATE_SCHEMA, validate_schema)
 
-    builder.add_node(NODE_INVOKE_LLM, partial(invoke_llm, llm=llm))
-    builder.add_node(NODE_VALIDATE_SCHEMA, validate_schema)
+        builder.set_entry_point(NODE_INVOKE_LLM)
+        builder.add_edge(NODE_INVOKE_LLM, NODE_VALIDATE_SCHEMA)
+        builder.add_conditional_edges(NODE_VALIDATE_SCHEMA, self._route_after_validation)
 
-    builder.set_entry_point(NODE_INVOKE_LLM)
-    builder.add_edge(NODE_INVOKE_LLM, NODE_VALIDATE_SCHEMA)
-    builder.add_conditional_edges(NODE_VALIDATE_SCHEMA, _route_after_validation)
-
-    return builder.compile()
+        return builder.compile()

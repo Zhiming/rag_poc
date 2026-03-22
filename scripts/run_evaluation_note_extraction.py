@@ -1,8 +1,8 @@
 import json
 
-from graph.evaluation_note_extraction.graph import build_graph
+from graph.evaluation_note_extraction.graph import EvaluationNoteExtractionGraph
 
-result = build_graph().invoke({
+result = EvaluationNoteExtractionGraph().build_graph().invoke({
     "normalized_text": (
         "security evaluation conducted on 20240918 at data center dc ams 02 "
 
