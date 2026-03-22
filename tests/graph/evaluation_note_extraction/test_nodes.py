@@ -1,12 +1,15 @@
+import pytest
 from unittest.mock import MagicMock
 
-from graph.evaluation_note_extraction.nodes import invoke_llm
+from graph.evaluation_note_extraction.nodes import invoke_llm, validate_schema
 from graph.evaluation_note_extraction.schema import EvaluationNote, EvaluationNoteList
 
 
 BASE_STATE = {
     "normalized_text": "network scan on hikvision camera at facility hq001 on 20240315",
-    "evaluation_notes": None,
+    "evaluation_notes": [],
+    "validation_errors": None,
+    "retry_count": 0,
 }
 
 CAMERA_NOTE = EvaluationNote(
@@ -108,3 +111,60 @@ def test_invoke_llm_excludes_none_fields_from_dicts():
 
     assert "manufacturer" not in result["evaluation_notes"][0]
     assert "device_id" not in result["evaluation_notes"][0]
+
+
+def test_invoke_llm_appends_validation_errors_to_prompt():
+    state = {**BASE_STATE, "validation_errors": ["issue field is required"]}
+    llm = _make_llm(EvaluationNoteList(observations=[]))
+    invoke_llm(state, llm)
+
+    prompt_arg = llm.with_structured_output.return_value.invoke.call_args[0][0]
+    assert "issue field is required" in prompt_arg
+
+
+def test_invoke_llm_clears_validation_errors_on_success():
+    llm = _make_llm(EvaluationNoteList(observations=[]))
+    result = invoke_llm(BASE_STATE, llm)
+
+    assert result["validation_errors"] is None
+
+
+# --- validate_schema ---
+
+def test_validate_schema_returns_no_errors_for_valid_notes():
+    state = {
+        **BASE_STATE,
+        "evaluation_notes": [{"issue": "default credentials active", "remediation": "credentials reset"}],
+    }
+    result = validate_schema(state)
+
+    assert result["validation_errors"] is None
+
+
+def test_validate_schema_returns_errors_for_missing_required_field():
+    state = {
+        **BASE_STATE,
+        "evaluation_notes": [{"issue": "default credentials active"}],  # missing remediation
+    }
+    result = validate_schema(state)
+
+    assert result["validation_errors"] is not None
+    assert len(result["validation_errors"]) > 0
+    assert result["retry_count"] == 1
+
+
+def test_validate_schema_raises_after_max_retries():
+    state = {
+        **BASE_STATE,
+        "evaluation_notes": [{"issue": "default credentials active"}],  # missing remediation
+        "retry_count": 2,
+    }
+    with pytest.raises(ValueError, match="Schema validation failed"):
+        validate_schema(state)
+
+
+def test_validate_schema_passes_for_empty_list():
+    state = {**BASE_STATE, "evaluation_notes": []}
+    result = validate_schema(state)
+
+    assert result["validation_errors"] is None

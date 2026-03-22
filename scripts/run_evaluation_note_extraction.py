@@ -35,6 +35,8 @@ result = build_graph().invoke({
         "the cause has not yet been identified and no corrective action has been taken"
     ),
     "evaluation_notes": [],
+    "validation_errors": None,
+    "retry_count": 0,
 })
 
 for i, device in enumerate(result["evaluation_notes"]):

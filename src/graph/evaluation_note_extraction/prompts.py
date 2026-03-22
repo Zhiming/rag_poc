@@ -27,3 +27,8 @@ EXTRACT_EVALUATION_NOTES = (
     "- evaluation_date: date of evaluation in ISO format (YYYY-MM-DD)\n\n"
     "Leave optional fields absent if not present in the text. Do not infer or guess."
 )
+
+VALIDATION_ERROR_SUFFIX = (
+    "\n\nYour previous output failed schema validation with these errors:\n{errors}"
+    "\nPlease fix them."
+)
