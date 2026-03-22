@@ -5,13 +5,6 @@ venv/*
 pyrightconfig.json
 .venv/
 .python-version
-src/lambdas/__pycache__/*
-src/lambdas/normalize_and_hash/__pycache__/*
-tests/lambdas/__pycache__/*
-tests/__pycache__/*
-src/aws/dynamodb/__pycache__/*
-src/aws/__pycache__/*
-src/lambdas/exact_duplicate_check/*
-src/graph/action_item/__pycache__/*
-src/graph/config/__pycache__/*
-src/graph/__pycache__/*
+**/__pycache__/
+**/*.pyc
+**/*.pyo
