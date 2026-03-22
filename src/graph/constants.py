@@ -8,6 +8,10 @@ FIELD_VALIDATION_ERRORS = "validation_errors"
 FIELD_REJECTION_NOTE = "rejection_note"
 FIELD_RETRY_COUNT = "retry_count"
 
+# MetadataExtractionState field keys
+FIELD_NORMALIZED_TEXT = "normalized_text"
+FIELD_METADATA = "metadata"
+
 # Validation
 VALIDATION_ERROR_MSG_KEY = "msg"
 VALIDATION_FAILED_MSG = "Schema validation failed after {max_retries} attempts: {errors}"
