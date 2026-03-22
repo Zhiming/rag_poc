@@ -4,14 +4,14 @@ from langgraph.graph import END, StateGraph
 
 from graph.config.chat_model import Chat_Model
 from graph.constants import NODE_INVOKE_LLM
-from graph.metadata_extraction.nodes import invoke_llm
-from graph.metadata_extraction.state import MetadataExtractionState
+from graph.evaluation_note_extraction.nodes import invoke_llm
+from graph.evaluation_note_extraction.state import EvaluationNoteExtractionState
 
 
 def build_graph():
     llm = Chat_Model().chat_llm
 
-    builder = StateGraph(MetadataExtractionState)
+    builder = StateGraph(EvaluationNoteExtractionState)
 
     builder.add_node(NODE_INVOKE_LLM, partial(invoke_llm, llm=llm))
 

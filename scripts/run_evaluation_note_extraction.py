@@ -1,6 +1,6 @@
 import json
 
-from graph.metadata_extraction.graph import graph
+from graph.evaluation_note_extraction.graph import graph
 
 result = graph.invoke({
     "normalized_text": (
@@ -34,9 +34,9 @@ result = graph.invoke({
         "the temperature sensor in power room b was reading 12 degrees above the expected baseline "
         "the cause has not yet been identified and no corrective action has been taken"
     ),
-    "metadata": None,
+    "evaluation_notes": None,
 })
 
-for i, device in enumerate(result["metadata"]):
+for i, device in enumerate(result["evaluation_notes"]):
     print(f"Device {i + 1}:")
     print(json.dumps(device, indent=2))

@@ -1,5 +1,5 @@
-EXTRACT_METADATA = (
-    "Extract metadata from the following data center security evaluation note.\n\n"
+EXTRACT_EVALUATION_NOTES = (
+    "Extract evaluation notes from the following data center security evaluation report.\n\n"
     "Text:\n{normalized_text}\n\n"
     "The note may describe multiple observations. These can be device-related (e.g. a faulty camera, "
     "an unresponsive badge reader) or non-device events (e.g. a physical breach, a personnel incident).\n\n"

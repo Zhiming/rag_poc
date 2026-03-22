@@ -1,12 +1,12 @@
 from unittest.mock import MagicMock
 
-from graph.metadata_extraction.nodes import invoke_llm
-from graph.metadata_extraction.schema import EvaluationNote, EvaluationNoteList
+from graph.evaluation_note_extraction.nodes import invoke_llm
+from graph.evaluation_note_extraction.schema import EvaluationNote, EvaluationNoteList
 
 
 BASE_STATE = {
     "normalized_text": "network scan on hikvision camera at facility hq001 on 20240315",
-    "metadata": None,
+    "evaluation_notes": None,
 }
 
 CAMERA_NOTE = EvaluationNote(
@@ -33,14 +33,14 @@ def test_invoke_llm_returns_list_of_dicts():
 
     result = invoke_llm(BASE_STATE, llm)
 
-    assert isinstance(result["metadata"], list)
-    assert len(result["metadata"]) == 1
-    assert result["metadata"][0]["issue"] == "default credentials active"
-    assert result["metadata"][0]["remediation"] == "credentials reset and firmware updated"
-    assert result["metadata"][0]["device_type"] == "camera"
-    assert result["metadata"][0]["manufacturer"] == "hikvision"
-    assert result["metadata"][0]["facility_id"] == "hq001"
-    assert result["metadata"][0]["evaluation_date"] == "2024-03-15"
+    assert isinstance(result["evaluation_notes"], list)
+    assert len(result["evaluation_notes"]) == 1
+    assert result["evaluation_notes"][0]["issue"] == "default credentials active"
+    assert result["evaluation_notes"][0]["remediation"] == "credentials reset and firmware updated"
+    assert result["evaluation_notes"][0]["device_type"] == "camera"
+    assert result["evaluation_notes"][0]["manufacturer"] == "hikvision"
+    assert result["evaluation_notes"][0]["facility_id"] == "hq001"
+    assert result["evaluation_notes"][0]["evaluation_date"] == "2024-03-15"
 
 
 def test_invoke_llm_returns_multiple_observations():
@@ -56,10 +56,10 @@ def test_invoke_llm_returns_multiple_observations():
 
     result = invoke_llm(BASE_STATE, llm)
 
-    assert len(result["metadata"]) == 3
-    assert result["metadata"][0]["device_type"] == "camera"
-    assert result["metadata"][1]["device_type"] == "security_door"
-    assert result["metadata"][2]["device_type"] is None  # non-device observation
+    assert len(result["evaluation_notes"]) == 3
+    assert result["evaluation_notes"][0]["device_type"] == "camera"
+    assert result["evaluation_notes"][1]["device_type"] == "security_door"
+    assert result["evaluation_notes"][2]["device_type"] is None  # non-device observation
 
 
 def test_invoke_llm_with_optional_fields_absent():
@@ -70,9 +70,9 @@ def test_invoke_llm_with_optional_fields_absent():
 
     result = invoke_llm(BASE_STATE, llm)
 
-    assert result["metadata"][0]["device_type"] == "security_door"
-    assert result["metadata"][0]["manufacturer"] is None
-    assert result["metadata"][0]["device_id"] is None
+    assert result["evaluation_notes"][0]["device_type"] == "security_door"
+    assert result["evaluation_notes"][0]["manufacturer"] is None
+    assert result["evaluation_notes"][0]["device_id"] is None
 
 
 def test_invoke_llm_passes_normalized_text_in_prompt():

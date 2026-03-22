@@ -3,6 +3,6 @@ from typing import Dict, List, Optional
 from typing_extensions import TypedDict
 
 
-class MetadataExtractionState(TypedDict):
+class EvaluationNoteExtractionState(TypedDict):
     normalized_text: str
-    metadata: Optional[List[Dict]]
+    evaluation_notes: Optional[List[Dict]]
