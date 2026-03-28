@@ -1,6 +1,19 @@
 import json
+import os
+from datetime import datetime
+from pathlib import Path
+
+from dotenv import load_dotenv
 
 from graph.evaluation_note_extraction.graph import EvaluationNoteExtractionGraph
+from constants import (
+    DEFAULT_OUTPUT_DIR,
+    EVALUATION_NOTE_OUTPUT_DIR_ENV_KEY,
+    OUTPUT_FILE_PREFIX,
+    OUTPUT_TIMESTAMP_FORMAT,
+)
+
+load_dotenv()
 
 result = EvaluationNoteExtractionGraph().build_graph().invoke({
     "normalized_text": (
@@ -42,3 +55,14 @@ result = EvaluationNoteExtractionGraph().build_graph().invoke({
 for i, note in enumerate(result["evaluation_notes"]):
     print(f"Note {i + 1}:")
     print(json.dumps(note, indent=2))
+
+output_dir = Path(os.getenv(EVALUATION_NOTE_OUTPUT_DIR_ENV_KEY, DEFAULT_OUTPUT_DIR))
+output_dir.mkdir(parents=True, exist_ok=True)
+
+timestamp = datetime.now().strftime(OUTPUT_TIMESTAMP_FORMAT)
+output_file = output_dir / f"{OUTPUT_FILE_PREFIX}_{timestamp}.json"
+
+with open(output_file, "w") as f:
+    json.dump(result["evaluation_notes"], f, indent=2)
+
+print(f"\nOutput written to: {output_file}")
