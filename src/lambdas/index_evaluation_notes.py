@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from elasticsearch import Elasticsearch, NotFoundError, NotFoundError
+from elasticsearch import Elasticsearch, NotFoundError
 
 from lambdas.config import EVALUATION_NOTES_INDEX_MAPPINGS
 from lambdas.constants import (
