@@ -5,3 +5,4 @@ from lambdas.constants import (
 
 OUTPUT_FILE_PREFIX = "evaluation_notes"
 OUTPUT_TIMESTAMP_FORMAT = "%Y%m%d_%H%M%S"
+EVALUATION_NOTE_INPUTS_FILE = "data/evaluation_note_inputs.json"

@@ -84,3 +84,32 @@ ES_FIELD_DEVICE_ID = "device_id"
 ES_FIELD_FACILITY_ID = "facility_id"
 ES_FIELD_LOCATION = "location"
 ES_FIELD_EVALUATION_DATE = "evaluation_date"
+
+# --- ES query structure keys ---
+ES_QUERY_KEY_QUERY = "query"
+ES_QUERY_KEY_KNN = "knn"
+ES_QUERY_KEY_RANK = "rank"
+ES_QUERY_KEY_RRF = "rrf"
+ES_QUERY_KEY_BOOL = "bool"
+ES_QUERY_KEY_MUST = "must"
+ES_QUERY_KEY_FILTER = "filter"
+ES_QUERY_KEY_MATCH = "match"
+ES_QUERY_KEY_TERM = "term"
+ES_QUERY_KEY_FIELD = "field"
+ES_QUERY_KEY_QUERY_VECTOR = "query_vector"
+ES_QUERY_KEY_NUM_CANDIDATES = "num_candidates"
+ES_QUERY_NUM_CANDIDATES_VALUE = 100
+ES_QUERY_SIZE = 5
+
+# --- ES search result keys ---
+ES_RESULT_KEY_HITS = "hits"
+ES_RESULT_KEY_ID = "_id"
+ES_RESULT_KEY_SCORE = "_score"
+
+# --- Semantic duplicate check ---
+SEMANTIC_DUP_THRESHOLD_ENV_KEY = "SEMANTIC_DUP_THRESHOLD"
+SEMANTIC_DUP_DEFAULT_THRESHOLD = 0.02
+FIELD_DUPLICATE_NOTES = "duplicate_notes"
+FIELD_MATCHED_IDS = "matched_ids"
+FIELD_TOTAL_NOTES_CHECKED = "total_notes_checked"
+FIELD_TOTAL_DUPLICATES_FOUND = "total_duplicates_found"
