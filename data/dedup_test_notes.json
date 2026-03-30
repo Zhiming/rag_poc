@@ -1,0 +1,28 @@
+[
+  {
+    "issue": "hikvision dome camera cam 4471 in cage 12b at dc ams 02 was operating with factory default administrator credentials active on firmware version 5 6 2 posing an unauthorised access risk",
+    "remediation": "default credentials were replaced with a strong password and firmware was upgraded to version 5 8 0",
+    "device_type": "camera",
+    "manufacturer": "hikvision",
+    "device_id": "cam 4471",
+    "facility_id": "dc ams 02",
+    "location": "cage 12b",
+    "evaluation_date": "2024-09-18"
+  },
+  {
+    "issue": "contractor entered a restricted colocation suite without an authorised escort in breach of the visitor access policy",
+    "remediation": "contractor was removed from the suite and their access badge was suspended pending an access review",
+    "facility_id": "dc ams 02",
+    "evaluation_date": "2024-09-18"
+  },
+  {
+    "issue": "aten kvm switch asset tag kvm 0312 in rack row c was found with the web management interface exposed on the default port with tls disabled",
+    "remediation": "web interface was restricted to the management vlan tls was enabled and the default management port was changed",
+    "device_type": "kvm switch",
+    "manufacturer": "aten",
+    "device_id": "kvm 0312",
+    "facility_id": "dc ams 02",
+    "location": "rack row c",
+    "evaluation_date": "2024-11-20"
+  }
+]
